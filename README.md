@@ -1,5 +1,5 @@
 # 12183-Fairy_Testing
-nthu oj solution
+NTHU OJ solution
 
 
 ```c
