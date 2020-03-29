@@ -1,5 +1,4 @@
 # 12183-Fairy_Testing
-## still RE
 nthu oj solution
 
 
@@ -19,7 +18,6 @@ Node *root, **val;
 void  renew_the_tree(Node*);
 void  freeTree(Node*);
 Node* buildTree();
-Node* makeNode(char);
 
 void Fairy_Testing(){
     scanf("%d %d", &n, &m);
@@ -52,51 +50,38 @@ Node* makeNode(char c){
     return np;
 }
 Node* buildTree(){
+    /*input*/
     char cIn; scanf("%c", &cIn);
+    
     Node *np;
-    if(cIn == '&' || cIn == '|'){
+    if(cIn == '&' || cIn == '|'){//bool sym
         np = makeNode(cIn);
         np->left = buildTree();
         np->left->parent = np;
         np->right = buildTree();
         np->right->parent = np;
     }
-    else if(cIn == '['){
+    else if(cIn == '['){//variable
+        int iIn;
+        scanf("%d", &iIn); /*Not char, since there may be number >= 10*/
+        np = makeNode(iIn + '0');
+        val[iIn] = np;
         scanf("%c", &cIn);
-        np = makeNode(cIn);
-        val[cIn - '0'] = np;
-        scanf("%c", &cIn);
-        if(cIn != ']'){ printf("Error([x])\n"); return NULL;}
     }
     else if(cIn == '\n') return NULL;
-
     return np;
 }
 
 void renew_the_tree(Node* np)
 {
-    if(np->left == NULL && np->right == NULL){
-        np->value = (np->value == 1) ? 0 : 1;
-    }
-    else{
-        int org = np->value;
-        if(np->token == '&'){
-            np->value = (np->left->value && np->right->value);
-        }
-        else if(np->token == '|'){
-            np->value = (np->left->value || np->right->value);
-        }
-        else {
-            printf("Error(renew)\n"); return;
-        }
-
-        if(org == np->value) return;
-    }
+    int org = np->value;
+    if(np->left == NULL && np->right == NULL) np->value = (np->value == 1) ? 0 : 1;
+    else if(np->token == '&') np->value = (np->left->value && np->right->value);
+    else if(np->token == '|') np->value = (np->left->value || np->right->value);
 
     if(np->parent == NULL) return;
+    else if(org == np->value) return;
     else renew_the_tree(np->parent);
-    
-    return;
 }
 void freeTree(Node* np){
     if(np == NULL) return;
@@ -104,17 +89,5 @@ void freeTree(Node* np){
     freeTree(np->right);
     free(np);
     return;
-}
-void show_val(){
-    for(int i = 1; i <= n; i++){
-        printf("%d:%d ", val[i]->token, val[i]->value);
-    }
-    printf("\n");
-}
-void printInfix(Node* np){
-    if(np == NULL) return;
-    printInfix(np->left);
-    printf("%c\n", np->token);
-    printInfix(np->right);
 }
 ```
