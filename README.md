@@ -103,4 +103,16 @@ void freeTree(Node* np){
     free(np);
     return;
 }
+void show_val(){
+    for(int i = 1; i <= n; i++){
+        printf("%d:%d ", val[i]->token, val[i]->value);
+    }
+    printf("\n");
+}
+void printInfix(Node* np){
+    if(np == NULL) return;
+    printInfix(np->left);
+    printf("%c\n", np->token);
+    printInfix(np->right);
+}
 ```
